@@ -1,12 +1,20 @@
 import time
 import random
 
-villians = ["Pirates", "gorgon", "troll", "fairie"]
-villian = random.choice(villians)
-foods = ["Cookies", "Oat", "Soup", "Pizza"]
-snacks = random.choice(foods)
-drinks = ["beer", "gin", "water", "Soda"]
-drink = random.choice(drinks)
+randomized = {
+    "villain": "",
+    "snacks": "",
+    "drink": ""
+    }
+
+
+def randomChoice():
+    villians = random.choice(["Pirates", "gorgon", "troll", "fairy"])
+    snack = random.choice(["Cookies", "Oat", "Soup", "Pizza"])
+    drinks = random.choice(["beer", "gin", "water", "Soda"])
+    randomized["villain"] = villians
+    randomized["snacks"] = snack
+    randomized["drink"] = drinks
 
 
 def print_pause(messages, sleep):
@@ -15,10 +23,18 @@ def print_pause(messages, sleep):
     time.sleep(sleep)
 
 
+def valid_input(prompt, options):
+    while True:
+        option = input(prompt).lower()
+        if option in options:
+            return option
+        print_pause(f'Sorry, the option "{option}" is invalid. Try again!', 2)
+
+
 def restart():
 
-    play_again = input("Would you like to play again?\n"
-                       "Enter y/n\n").lower()
+    play_again = valid_input("Would you like to play again?\n"
+                             "Enter y/n\n", ['y', 'n'])
     if play_again == "y":
         play_game()
     elif play_again == "n":
@@ -27,13 +43,13 @@ def restart():
 
 
 def intro():
-
+    villian = randomized["villain"]
     print_pause("You find yourself standing in an open field, "
                 "filled with grass and yellow wildflowers.", 2)
     print_pause(f"Rumor has it that a wicked {villian} is somewhere "
                 "around here, and has been "
                 "terrifying the entire village.", 2)
-    print_pause("You are lost, hungry and farmished.", 2)
+    print_pause("You are lost, hungry and famished.", 2)
     print_pause("In front of you is a House.", 2)
     print_pause("To your right is a Church.", 2)
     print_pause("In your hand you hold the keys "
@@ -62,6 +78,9 @@ def church(item):
 
 def house(item):
 
+    drink = randomized["drink"]
+    snacks = randomized["snacks"]
+
     print_pause("You approach the door of the house.", 2)
     print_pause("You are about to knock when the door "
                 "opens.", 2)
@@ -69,8 +88,8 @@ def house(item):
     print_pause("You are scared to enter the house.", 2)
     print_pause("You remember the rumors, "
                 "but you need a place to rest and something to eat", 2)
-    enter_or_run = input("Would you like to "
-                         "(1) enter the house or (2) run away?\n")
+    enter_or_run = valid_input("Would you like to "
+                         "(1) enter the house or (2) run away?\n", ['1', '2'])
     if enter_or_run == "2":
         print_pause("You run back into the field. Luckily, "
                     "nothing seem to be chasing you.", 2)
@@ -83,12 +102,12 @@ def house(item):
                     " a dinner and kitchen behind the dinner.", 2)
         print_pause("Your stomach rumbles. you walk to"
                     " the kitchen, there you find a fridge!", 2)
-        open_fridge = input("Would you like to open the fridge?\n"
-                            "Enter y/n\n").lower()
+        open_fridge = valid_input("Would you like to open the fridge?\n"
+                            "Enter y/n\n", ['y', 'n'])
         if open_fridge == "y":
             if "key" in item:
                 print_pause("You open the refrigerator.", 2)
-                print_pause("You get exicted. Alas! "
+                print_pause("You get excited. Alas! "
                             "something to eat.", 2)
                 print_pause(f"You pick up a bottle of {drink}"
                             f" and some {snacks}", 2)
@@ -107,16 +126,13 @@ def house(item):
             print_pause("You lay on the chair and sleep.", 2)
             restart()
 
-    else:
-        input("Would you like to (1) enter or (2) run away?\n")
-
-
+    
 def game(item):
 
-    response = input("Enter 1 to knock on the door of the House.\n"
+    response = valid_input("Enter 1 to knock on the door of the House.\n"
                      "Enter 2 to peer into the Church.\n"
                      "What would you like to do?\n"
-                     "(Please enter 1 or 2.)\n")
+                     "(Please enter 1 or 2.)\n", ['1', '2'])
     if response == "1":
         house(item)
 
@@ -130,6 +146,8 @@ def game(item):
 def play_game():
 
     item = []
+    randomChoice()
+
     intro()
 
     game(item)
